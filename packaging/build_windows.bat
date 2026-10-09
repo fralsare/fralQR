@@ -50,21 +50,29 @@ if not exist "dist\%APP%\%APP%.exe" (
   exit /b 1
 )
 
-where iscc >nul 2>nul
-if errorlevel 1 (
-  echo [ERROR] Inno Setup (ISCC) not found on PATH.
-  echo         Install it with:  choco install innosetup
-  echo         (or from https://jrsoftware.org/isdl.php) then re-run.
-  echo [NOTE]  The portable .exe above was still built.
+REM Locate ISCC: try PATH first, then the standard Inno Setup 6 install dirs.
+REM (Chocolatey may not have put it on PATH for this shell yet.)
+set "ISCC="
+for /f "delims=" %%i in ('where iscc 2^>nul') do if not defined ISCC set "ISCC=%%i"
+if not defined ISCC if exist "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" set "ISCC=C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+if not defined ISCC if exist "C:\Program Files\Inno Setup 6\ISCC.exe" set "ISCC=C:\Program Files\Inno Setup 6\ISCC.exe"
+
+if not defined ISCC (
+  echo [ERROR] Inno Setup compiler ISCC.exe was not found.
+  echo         Install it with: choco install innosetup
+  echo         or download it from https://jrsoftware.org/isdl.php
+  echo [NOTE]  The portable single-file exe above was still built.
   exit /b 1
 )
-iscc packaging\%APP%.iss
+
+echo == Inno Setup installer ==
+call "%ISCC%" packaging\%APP%.iss
 if errorlevel 1 (
-  echo [ERROR] Inno Setup (ISCC) failed to compile the installer.
+  echo [ERROR] Inno Setup failed to compile the installer.
   exit /b 1
 )
 if not exist "dist\%APP%-Setup-%VERSION%.exe" (
-  echo [ERROR] installer not found: dist\%APP%-Setup-%VERSION%.exe
+  echo [ERROR] installer file was not created in dist.
   exit /b 1
 )
 

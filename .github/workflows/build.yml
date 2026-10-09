@@ -114,7 +114,11 @@ jobs:
           }
 
       - name: Build portable .exe + installer .exe
-        run: packaging\build_windows.bat
+        run: |
+          # Make sure ISCC is discoverable even if Chocolatey did not add
+          # the Inno Setup dir to PATH for this shell.
+          $env:Path += ";C:\Program Files (x86)\Inno Setup 6"
+          .\packaging\build_windows.bat
 
       - name: List artifacts
         run: |

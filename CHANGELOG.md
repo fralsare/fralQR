@@ -18,3 +18,11 @@ and uses [Semantic Versioning](https://semver.org/).
 - In-app **Donations / Support** dialog and **About**.
 - Release packaging: `.AppImage`, `.deb`, `.rpm` (Linux) and installer `.exe`
   plus portable `.exe` (Windows), built automatically via GitHub Actions.
+
+### Fixed
+- **Windows build (CI + script)**: fixed a `cmd.exe` parse error
+  (`… was unexpected at this time`) caused by parentheses inside `echo` text
+  within multi-line `if (…)` blocks in `packaging/build_windows.bat` and
+  `fralQR.bat`. Inno Setup's `ISCC.exe` is now located reliably (PATH, then the
+  standard install dirs) so the installer step no longer depends on Chocolatey
+  having added it to the current shell's `PATH`.
