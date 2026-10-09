@@ -1,0 +1,35 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# --- Build / packaging outputs (produced locally or by CI; not committed) ---
+dist/
+build/
+pyinstaller-build/
+.build-venv/
+.rpm/
+*.spec.bak
+*.AppImage
+*.deb
+*.rpm
+*.exe
+*.dmg
+*.iso
+*.nupkg
+
+# --- App data (your local working files — NOT part of the source) ---
+AppTest/
+Out/
+pdf/
+images/
+
+# --- OS junk ---
+Thumbs.db
+Desktop.ini
+.DS_Store

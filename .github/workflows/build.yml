@@ -1,0 +1,153 @@
+# ---------------------------------------------------------------------------
+# fralQR - build all release artifacts and publish them as a GitHub Release.
+#
+# What it produces:
+#   Linux   : fralQR_<ver>_<arch>.deb
+#             fralQR-<ver>-<rel>.<arch>.rpm
+#             fralQR-<ver>-<arch>.AppImage
+#   Windows : fralQR-<ver>-windows-portable.exe   (single file, no install)
+#             fralQR-Setup-<ver>.exe              (Inno Setup installer)
+#
+# Triggers:
+#   - on every push/PR to main (builds artifacts you can download from the run)
+#   - on a tag  v*.*.*          (builds + creates/updates the GitHub Release)
+#   - manually:  "Run workflow" button
+#
+# NOTE: the version is kept in one place here (env.VERSION). Keep it in sync
+# with APP_VERSION in fralQR.py and the Version in packaging/*.spec / *.iss.
+# ---------------------------------------------------------------------------
+name: Build & Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*.*.*"]
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  APP: fralQR
+  VERSION: 1.0.0
+
+jobs:
+  # ------------------------------------------------------------------ Linux
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build deps (rpm toolchain, squashfs, tk for test)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv python3-tk python3-pil \
+            rpm squashfs-tools
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Use the committed icons; regenerate only if they are missing.
+      - name: Ensure icons
+        run: |
+          if [ ! -f packaging/icon.png ] || [ ! -f packaging/icon.ico ]; then
+            python -m pip install --quiet pillow
+            python packaging/make_icon.py
+          fi
+
+      - name: Build bundle + .deb + .rpm (+ .AppImage)
+        run: bash packaging/build_linux.sh
+
+      - name: Verify .deb and .rpm
+        run: |
+          set -euo pipefail
+          dpkg-deb --info dist/${APP}_${VERSION}_*.deb
+          rpm -qip $(find dist -name '*.rpm')
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ env.APP }}-${{ env.VERSION }}
+          path: |
+            dist/*.deb
+            dist/*.rpm
+            dist/*.AppImage
+
+  # ---------------------------------------------------------------- Windows
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Use the committed icons; regenerate only if they are missing.
+      - name: Ensure icons
+        run: |
+          if (-not (Test-Path packaging\icon.png) -or
+              -not (Test-Path packaging\icon.ico)) {
+            python -m pip install --quiet pillow
+            python packaging\make_icon.py
+          }
+
+      - name: Build portable .exe + installer .exe
+        run: packaging\build_windows.bat
+
+      - name: List artifacts
+        run: |
+          Get-ChildItem dist -File | Format-Table Name, Length
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ env.APP }}-${{ env.VERSION }}
+          path: |
+            dist/fralQR-1.0.0-windows-portable.exe
+            dist/fralQR-Setup-1.0.0.exe
+
+  # ------------------------------------------- Create / update the Release
+  release:
+    if: >-
+      startsWith(github.ref, 'refs/tags/') ||
+      github.event_name == 'workflow_dispatch'
+    needs: [linux, windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: Show collected files
+        run: |
+          find release-assets -type f \
+            \( -name '*.deb' -o -name '*.rpm' \
+               -o -name '*.AppImage' -o -name '*.exe' \)
+
+      - name: Create / update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: >-
+            ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name
+                || format('v{0}', env.VERSION) }}
+          name: >-
+            fralQR ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name
+                       || env.VERSION }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            release-assets/**/*.deb
+            release-assets/**/*.rpm
+            release-assets/**/*.AppImage
+            release-assets/**/*.exe

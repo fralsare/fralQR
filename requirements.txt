@@ -1,0 +1,8 @@
+# fralQR runtime dependencies.
+#
+# tkinter is part of the Python standard library and ships with Python on
+# Windows and most Linux distros (see MANUAL.md if it is missing).
+#
+# Pillow is only needed for the "Image(s) -> PDF" tab; the QR tab works
+# with the standard library alone.
+Pillow>=9.0

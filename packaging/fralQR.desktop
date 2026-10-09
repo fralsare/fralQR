@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=fralQR
+Comment=Feed a PDF, get scannable menu QR codes (plus: build a PDF from image(s))
+Exec=fralQR
+Icon=fralQR
+Terminal=false
+Categories=Graphics;Office;
+Keywords=qr;pdf;menu;

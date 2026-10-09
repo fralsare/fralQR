@@ -1,0 +1,66 @@
+@echo off
+REM --------------------------------------------------------------------------
+REM Build the fralQR Windows release artifacts:
+REM   - portable single .exe : dist\fralQR-1.0.0-windows-portable.exe
+REM   - installer .exe       : dist\fralQR-Setup-1.0.0.exe  (via Inno Setup)
+REM
+REM Run from a normal Command Prompt (it cd's to the repo root itself):
+REM   packaging\build_windows.bat
+REM
+REM Needs: Python 3.10+ on PATH. For the installer, Inno Setup 6 (ISCC) on
+REM PATH - install with:  choco install innosetup
+REM --------------------------------------------------------------------------
+setlocal EnableExtensions EnableDelayedExpansion
+cd /d "%~dp0.."
+
+set VERSION=1.0.0
+set APP=fralQR
+
+echo == fralQR %VERSION% (Windows) ==
+
+where py >nul 2>nul
+if errorlevel 1 (
+  echo [ERROR] Python not found on PATH. Install Python 3.10+ and re-run.
+  exit /b 1
+)
+
+if not exist ".build-venv\Scripts\pyinstaller.exe" (
+  echo == creating build venv ==
+  py -m venv .build-venv
+  ".build-venv\Scripts\python.exe" -m pip install --upgrade pip
+  ".build-venv\Scripts\python.exe" -m pip install pyinstaller pillow
+)
+set PYI=.build-venv\Scripts\pyinstaller.exe
+
+REM ---- 1) portable single-file .exe --------------------------------------
+echo == PyInstaller (onefile) - portable ==
+if exist "dist\%APP%.exe" del /f /q "dist\%APP%.exe"
+"%PYI%" --clean --noconfirm --onefile --noconsole --name %APP% %APP%.py
+if not exist "dist\%APP%.exe" (
+  echo [ERROR] onefile build failed
+  exit /b 1
+)
+copy /y "dist\%APP%.exe" "dist\%APP%-%VERSION%-windows-portable.exe" >nul
+
+REM ---- 2) installer (onedir + Inno Setup) --------------------------------
+echo == PyInstaller (onedir) + Inno Setup ==
+"%PYI%" --clean --noconfirm packaging\%APP%.spec
+if not exist "dist\%APP%\%APP%.exe" (
+  echo [ERROR] onedir build failed
+  exit /b 1
+)
+
+where iscc >nul 2>nul
+if errorlevel 1 (
+  echo [ERROR] Inno Setup (ISCC) not found on PATH.
+  echo         Install it with:  choco install innosetup
+  echo         (or from https://jrsoftware.org/isdl.php) then re-run.
+  echo [NOTE]  The portable .exe above was still built.
+  exit /b 1
+)
+iscc packaging\%APP%.iss
+
+echo == done.
+dir /b "dist\%APP%-*.*"
+
+endlocal
