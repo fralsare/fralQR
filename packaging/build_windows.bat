@@ -59,6 +59,14 @@ if errorlevel 1 (
   exit /b 1
 )
 iscc packaging\%APP%.iss
+if errorlevel 1 (
+  echo [ERROR] Inno Setup (ISCC) failed to compile the installer.
+  exit /b 1
+)
+if not exist "dist\%APP%-Setup-%VERSION%.exe" (
+  echo [ERROR] installer not found: dist\%APP%-Setup-%VERSION%.exe
+  exit /b 1
+)
 
 echo == done.
 dir /b "dist\%APP%-*.*"
