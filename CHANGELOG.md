@@ -29,3 +29,7 @@ and uses [Semantic Versioning](https://semver.org/).
 - **Release publishing (CI)**: `gh release create` now targets the commit SHA
   (`GITHUB_SHA`) instead of the full ref (`refs/tags/…`), which the GitHub API
   rejects as an invalid `target_commitish` (HTTP 422).
+- **AppImage (Linux, CI)**: the AppImage is now built FUSE-free by extracting
+  the plain `appimagetool` ELF out of the official AppImage. GitHub runners have
+  no FUSE, so executing the tool's `.AppImage` directly failed and the release
+  was silently missing the AppImage.

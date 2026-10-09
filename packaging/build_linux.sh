@@ -89,19 +89,61 @@ find "$RB/RPMS" -name "*.rpm" -exec cp -f {} "$DIST/" \;
 rm -rf "$RB"
 echo "    -> $DIST/*.rpm"
 
-# ---- 4) .AppImage (best effort) ------------------------------------------ #
+# ---- 4) .AppImage --------------------------------------------------------- #
+# FUSE-free build. Prefer an appimagetool already on PATH; otherwise extract
+# the plain ELF out of the official appimagetool-x86_64.AppImage and run THAT.
+# Extracting the squashfs (dd + unsquashfs) needs no FUSE, and running the
+# extracted binary needs none either - so this works on CI runners, which have
+# no FUSE (directly executing the .AppImage would fail there).
 echo "==> building .AppImage (best effort)"
+APPIMAGE_OUT="$DIST/${APP}-${VERSION}-${ARCH}.AppImage"
+rm -f "$APPIMAGE_OUT"
+
+# Locate the squashfs payload inside an AppImage by validating its superblock
+# (the block-size field must be a power of two), so we don't rely on a fixed
+# byte offset that could shift between appimagetool builds.
+squashfs_offset() {
+  python3 - "$1" <<'PY'
+import struct, sys
+d = open(sys.argv[1], "rb").read()
+i = 0
+while True:
+    i = d.find(b"hsqs", i)
+    if i < 0:
+        break
+    if i + 16 <= len(d):
+        blk = struct.unpack_from("<I", d, i + 12)[0]
+        if blk in (4096, 8192, 16384, 32768, 65536, 131072, 262144):
+            print(i)
+            break
+    i += 1
+PY
+}
+
 AT=""
+AT_TMP=""
 if command -v appimagetool >/dev/null 2>&1; then
   AT="appimagetool"
 else
-  ATBIN="$DIST/appimagetool"
-  if curl -fsSL -o "$ATBIN" \
+  AT_TMP="$DIST/.appimagetool.dl"
+  if curl -fsSL -o "$AT_TMP" \
      "https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage" \
-     && [ -s "$ATBIN" ]; then
-    chmod +x "$ATBIN"; AT="$ATBIN"
+     && [ -s "$AT_TMP" ]; then
+    OFF="$(squashfs_offset "$AT_TMP")"
+    if [ -n "$OFF" ]; then
+      SQ="$DIST/.at-squashfs.img"
+      ATX="$DIST/.at-extract"
+      rm -rf "$ATX"
+      dd if="$AT_TMP" of="$SQ" bs=1 skip="$OFF" status=none
+      if unsquashfs -q -d "$ATX" "$SQ" >/dev/null 2>&1 \
+         && [ -x "$ATX/usr/bin/appimagetool" ]; then
+        AT="$ATX/usr/bin/appimagetool"
+      fi
+      rm -rf "$SQ"
+    fi
   fi
 fi
+
 if [ -n "$AT" ]; then
   APPDIR="$DIST/AppDir"
   rm -rf "$APPDIR"; mkdir -p "$APPDIR/usr/bin"
@@ -109,13 +151,17 @@ if [ -n "$AT" ]; then
   cp packaging/fralQR.desktop "$APPDIR/$APP.desktop"
   cp packaging/icon.png "$APPDIR/$APP.png"
   sed -i "s#^Exec=.*#Exec=$APP#" "$APPDIR/$APP.desktop"
-  "$AT" "$APPDIR" "$DIST/${APP}-${VERSION}-${ARCH}.AppImage" || \
-    echo "    (AppImage build failed - it is also produced by CI)"
-  rm -rf "$APPDIR" "$ATBIN"
-  echo "    -> $DIST/${APP}-${VERSION}-${ARCH}.AppImage"
+  if "$AT" "$APPDIR" "$APPIMAGE_OUT" >/dev/null 2>&1 && [ -s "$APPIMAGE_OUT" ]; then
+    echo "    -> $APPIMAGE_OUT"
+  else
+    echo "    (AppImage build failed - build it locally and attach it to the release)"
+  fi
+  rm -rf "$APPDIR"
 else
-  echo "    SKIPPED .AppImage (appimagetool unavailable); it is built in CI."
+  echo "    SKIPPED .AppImage (appimagetool unavailable and auto-extract failed)"
 fi
+if [ -n "$AT_TMP" ]; then rm -f "$AT_TMP"; fi
+rm -rf "$DIST/.at-extract" "$DIST/.at-squashfs.img"
 
 echo "==> done. Artifacts in $DIST/:"
 ls -lh "$DIST" | grep -Ev "deb-stage|AppDir" || true
