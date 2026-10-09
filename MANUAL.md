@@ -87,6 +87,7 @@ buttons to **Copy** each URL and to **Open output folder**.
   the PDF. **This is the one to print.** It opens faster and looks better on phones.
 
 ### Output files
+
 | File | What it is |
 |------|-----------|
 | `…_qr_direct.png` | QR image (direct link) |
