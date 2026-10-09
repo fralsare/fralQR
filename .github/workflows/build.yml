@@ -170,9 +170,12 @@ jobs:
           FILES=(release-assets/**/*.deb release-assets/**/*.rpm
                  release-assets/**/*.AppImage release-assets/**/*.exe)
           [ "${#FILES[@]}" -gt 0 ] || { echo "no artifacts"; exit 1; }
+          # Target the exact commit SHA: it is always a valid target_commitish
+          # (unlike the full GITHUB_REF, e.g. refs/tags/v1.0.0, which GitHub
+          # rejects), and works for both tag pushes and manual runs.
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" --clobber "${FILES[@]}"
           else
             gh release create "$TAG" --title "fralQR ${TAG}" \
-              --target "${GITHUB_REF}" --notes "fralQR ${TAG}" "${FILES[@]}"
+              --target "${GITHUB_SHA}" --notes "fralQR ${TAG}" "${FILES[@]}"
           fi

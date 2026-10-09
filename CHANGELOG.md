@@ -26,3 +26,6 @@ and uses [Semantic Versioning](https://semver.org/).
   `fralQR.bat`. Inno Setup's `ISCC.exe` is now located reliably (PATH, then the
   standard install dirs) so the installer step no longer depends on Chocolatey
   having added it to the current shell's `PATH`.
+- **Release publishing (CI)**: `gh release create` now targets the commit SHA
+  (`GITHUB_SHA`) instead of the full ref (`refs/tags/…`), which the GitHub API
+  rejects as an invalid `target_commitish` (HTTP 422).
