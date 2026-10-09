@@ -1,5 +1,19 @@
 # fralQR
 
+<!--
+  GitHub "About" box metadata (set it via the "..." / gear on the right sidebar
+  of the repo page). Paste the two values below into those fields.
+
+  Description:
+    Turn a PDF menu into print-ready QR codes. Feed it a PDF, print the codes,
+    and customers scan to view the menu in their browser. Windows + Linux
+    desktop app.
+
+  Topics (space- or comma-separated, lowercase, no spaces inside a tag):
+    qr-code pdf python tkinter desktop-app cross-platform menu restaurant
+    image-to-pdf print gui standalone pyinstaller
+-->
+
 **Feed a PDF, get scannable menu QR codes.**
 
 fralQR is a tiny, single-purpose, cross-platform desktop app (Windows + Linux)
