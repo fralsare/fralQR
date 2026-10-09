@@ -1,0 +1,20 @@
+# ---------------------------------------------------------------------------
+# fralQR - repository line-ending rules (cross-platform, Windows + Linux)
+#
+# Git stores text files with LF in the repo; the `eol=` below only controls the
+# form used in the working tree when a file is checked out.
+# ---------------------------------------------------------------------------
+
+# Normalize every text file to LF in the repo -> clean, stable diffs.
+* text=auto
+
+# Windows batch/PowerShell scripts MUST be checked out with CRLF on EVERY
+# platform. cmd.exe can mis-parse multi-line `if (...)` / `for (...)` blocks
+# (packaging/build_windows.bat has several) when they carry LF endings.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary assets - never run these through EOL or whitespace normalization.
+*.png  binary
+*.ico  binary
