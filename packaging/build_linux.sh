@@ -151,6 +151,11 @@ if [ -n "$AT" ]; then
   cp packaging/fralQR.desktop "$APPDIR/$APP.desktop"
   cp packaging/icon.png "$APPDIR/$APP.png"
   sed -i "s#^Exec=.*#Exec=$APP#" "$APPDIR/$APP.desktop"
+  # AppRun is REQUIRED at the payload root. Without it the AppImage runtime
+  # fails with "execv error: No such file or directory". $APPDIR is expanded
+  # by the AppImage runtime at launch time (kept literal here via printf).
+  printf '#!/bin/sh\nexec "$APPDIR/usr/bin/%s" "$@"\n' "$APP" > "$APPDIR/AppRun"
+  chmod +x "$APPDIR/AppRun"
   if "$AT" "$APPDIR" "$APPIMAGE_OUT" >/dev/null 2>&1 && [ -s "$APPIMAGE_OUT" ]; then
     echo "    -> $APPIMAGE_OUT"
   else

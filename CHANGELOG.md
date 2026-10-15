@@ -33,3 +33,6 @@ and uses [Semantic Versioning](https://semver.org/).
   the plain `appimagetool` ELF out of the official AppImage. GitHub runners have
   no FUSE, so executing the tool's `.AppImage` directly failed and the release
   was silently missing the AppImage.
+- **AppImage would not launch**: the payload was missing the required `AppRun`,
+  so the runtime failed with `execv error: No such file or directory`. The build
+  now writes an `AppRun` that execs the bundled binary.
