@@ -112,9 +112,10 @@ Then go to the repo and **finish** the release that GitHub auto-created:
 5. Wait for CI: <https://github.com/fralsare/fralQR/actions>. The
    **"Build & attach release artifacts"** job runs the Linux + Windows builds,
    then uploads all five files as release assets.
-6. Attach the **demo video**: on the release page, drag
-   `AppTest/DemoVideo/FralQRDemo.webm` into the "Attach binaries" box
-   (or add it later). It is referenced by the README's Demo section.
+6. (Optional) Also attach the **demo video** as a release asset if you want a
+   standalone download: drag `demo_video/FralQRDemo.webm` into the
+   "Attach binaries" box. The docs already link the in-repo copy, so this is
+   not required.
 7. Click **Publish release**.
 
 > The builds take a few minutes (Python + PyInstaller install + compile).
@@ -134,11 +135,12 @@ AppTest/ReleaseFiles/fralQR-Setup-1.0.0.exe
 AppTest/ReleaseFiles/fralQR-1.0.0-windows-portable.exe
 ```
 
-…plus the demo video: `AppTest/DemoVideo/FralQRDemo.webm`.
+The demo video is committed in the repo at `demo_video/FralQRDemo.webm` — it
+needs no uploading (GitHub hosts and plays it directly).
 
 Option A — **web UI**: on the release page, drag the files from
-`AppTest/ReleaseFiles/` (and the demo video) into the "Attach binaries" box.
-The release then carries **six assets** (five artifacts + `FralQRDemo.webm`).
+`AppTest/ReleaseFiles/` into the "Attach binaries" box.
+The release carries the **five artifact assets**.
 
 Option B — **`gh` CLI** (fastest; `brew install gh` / `apt install gh`, then
 `gh auth login`):
@@ -156,14 +158,13 @@ gh release create v1.0.0 \
   "dist/fralQR-1.0.0-amd64.AppImage"
 ```
 
-Add the Windows files and the demo video the same way (everything is already in
+Add the Windows files the same way (everything is already in
 `AppTest/ReleaseFiles/`), e.g.:
 
 ```bash
 gh release upload v1.0.0 \
   "AppTest/ReleaseFiles/fralQR-Setup-1.0.0.exe" \
-  "AppTest/ReleaseFiles/fralQR-1.0.0-windows-portable.exe" \
-  "AppTest/DemoVideo/FralQRDemo.webm"
+  "AppTest/ReleaseFiles/fralQR-1.0.0-windows-portable.exe"
 ```
 
 ---
@@ -172,8 +173,9 @@ gh release upload v1.0.0 \
 
 - <https://github.com/fralsare/fralQR> — README renders, badges show, folder list
   does **not** include `AppTest/`.
-- <https://github.com/fralsare/fralQR/releases/tag/v1.0.0> — six assets present
-  (five artifacts + `FralQRDemo.webm`).
+- <https://github.com/fralsare/fralQR/releases/tag/v1.0.0> — five assets present.
+- The README **▶ Demo** link opens the video at
+  <https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm>.
 - Download one and run it (e.g. `chmod +x fralQR-*.AppImage && ./fralQR-*.AppImage`).
 
 ---

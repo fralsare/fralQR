@@ -28,9 +28,8 @@ any phone.
 
 ## ▶ Demo
 
-[▶ Watch a short demo of fralQR in action](https://github.com/fralsare/fralQR/releases/download/v1.0.0/FralQRDemo.webm)
-(screen recording, attached as the `FralQRDemo.webm` asset on the
-[v1.0.0 release](https://github.com/fralsare/fralQR/releases/tag/v1.0.0)).
+[▶ Watch a short demo of fralQR in action](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)
+(screen recording; the file lives in this repo under [`demo_video/`](https://github.com/fralsare/fralQR/tree/main/demo_video)).
 
 ## Features
 
