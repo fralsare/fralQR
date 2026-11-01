@@ -154,15 +154,5 @@ More at [SUPPORT.md](SUPPORT.md).
 - Your PDF is uploaded to a **public** host (Catbox.moe) so anyone with the QR/URL can open it — that's the point, but only share URLs you intend to make public.
 - No account, no data collection, no analytics.
 
-## Building from source
-
-Prefer to build the binaries yourself? Everything lives in [`packaging/`](packaging/):
-
-- **Linux** (`.deb`, `.rpm`, `.AppImage`): `bash packaging/build_linux.sh` — builds a self-contained PyInstaller bundle, then packages it. Needs `python3-venv`, `dpkg-deb`, and `curl`; `rpmbuild` is optional.
-- **Windows** (installer + portable `.exe`): on a Windows machine with Python 3.10+ and [Inno Setup 6](https://jrsoftware.org/isdl.php), run `packaging\build_windows.bat`.
-- **Icons**: `python packaging/make_icon.py` regenerates `packaging/icon.png` and `icon.ico`.
-
-[GitHub Actions](.github/workflows/build.yml) builds all five artifacts automatically on every release tag, so you can also just tag a release and download the binaries.
-
 ## License
 MIT — see [LICENSE](LICENSE).
