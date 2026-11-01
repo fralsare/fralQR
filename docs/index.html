@@ -32,27 +32,17 @@
       border: 0;
       border-radius: 12px;
     }
-    #soundhint {
-      position: absolute;
-      left: 50%;
-      bottom: 4.5%;
-      transform: translateX(-50%);
-      background: rgba(22, 27, 34, 0.92);
-      color: #e6edf3;
-      border: 1px solid #388bfd;
-      padding: 8px 16px;
-      border-radius: 999px;
+    #hint {
+      color: #8b949e;
       font-size: 14px;
-      cursor: pointer;
-      z-index: 10;
-      user-select: none;
+      margin: 12px 0 0;
+      text-align: center;
     }
-    #soundhint.hidden { display: none; }
     h1 {
       color: #e6edf3;
       font-size: 18px;
       font-weight: 600;
-      margin: 14px 0 0;
+      margin: 6px 0 0;
       text-align: center;
     }
     h1 a {
@@ -63,95 +53,19 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="player"><div id="yt"></div></div>
-    <div id="soundhint">🔇 Click here (or the video) to turn sound on</div>
+    <div class="player">
+      <iframe
+        src="https://www.youtube.com/embed/vknbgj5KRxQ?autoplay=1&mute=1&rel=0"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+    <p id="hint">🔇 Video starts automatically (muted, as browsers require) —
+      click the speaker icon in the player to turn sound on.</p>
     <h1>fralQR — PDF menu to print-ready QR codes &middot;
       <a href="https://github.com/fralsare/fralQR">github.com/fralsare/fralQR</a></h1>
   </div>
-
-  <script>
-    var player = null;
-    var hint = document.getElementById("soundhint");
-
-    function showSound() { hint.classList.remove("hidden"); }
-    function hideSound() { hint.classList.add("hidden"); }
-
-    // The video must play (muted if the browser blocks sound).
-    function ensurePlaying() {
-      if (!player) return;
-      try {
-        var st = player.getPlayerState();
-        if (st !== 1) { // 1 === playing
-          player.playVideo();
-          if (player.isMuted()) player.unMute();
-        }
-        if (player.isMuted()) showSound(); else hideSound();
-      } catch (e) { /* player still initialising */ }
-    }
-
-    hint.addEventListener("click", function () {
-      if (!player) return;
-      if (player.isMuted()) player.unMute();
-      hideSound();
-    });
-
-    function onPlayerReady(ev) {
-      // Canonical muted-autoplay pattern: mute via the API first, then
-      // play. Browsers always allow muted autoplay on page load.
-      ev.target.mute();
-      ev.target.playVideo();
-      showSound();
-    }
-
-    // Fallback: if the browser blocked even muted autoplay (or the API
-    // raced), the first click anywhere on the page starts it with sound.
-    document.addEventListener("click", function (e) {
-      if (e.target === hint || !player) return;
-      try {
-        if (player.getPlayerState() !== 1) {
-          player.playVideo();
-          player.unMute();
-          hideSound();
-        } else if (player.isMuted()) {
-          player.unMute();
-          hideSound();
-        }
-      } catch (err) { /* player not ready yet */ }
-    });
-
-    function onPlayerStateChange(ev) {
-      if (ev.data === 1) {
-        if (!player.isMuted()) hideSound();
-      } else if (ev.data === 0) {
-        showSound(); // ended: offer replay with sound
-      }
-    }
-
-    function onYTAPI() {
-      player = new YT.Player("yt", {
-        videoId: "vknbgj5KRxQ",
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          controls: 1,
-          rel: 0,
-          modestbranding: 1,
-          iv_load_policy: 3
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange
-        }
-      });
-      // Fallback in case onReady already passed the ready race.
-      setTimeout(ensurePlaying, 1200);
-      setTimeout(ensurePlaying, 3000);
-    }
-
-    var tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = onYTAPI;
-  </script>
 </body>
 </html>
