@@ -8,10 +8,10 @@ turning images back into a PDF). This manual covers installation and every scree
 
 <!-- markdownlint-disable MD033 -->
 <p align="center">
-  <iframe width="800" height="450"
-    src="https://www.youtube.com/embed/vknbgj5KRxQ"
-    title="fralQR demo" frameborder="0"
-    allowfullscreen></iframe>
+  <a href="https://youtu.be/vknbgj5KRxQ" target="_blank" rel="noopener">
+    <img src="https://img.youtube.com/vi/vknbgj5KRxQ/maxresdefault.jpg"
+      alt="▶ fralQR demo video" width="800">
+  </a>
 </p>
 <!-- markdownlint-enable MD033 -->
 
