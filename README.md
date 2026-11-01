@@ -30,16 +30,17 @@ any phone.
 
 <!-- markdownlint-disable MD033 -->
 <p align="center">
-  <a href="https://fralsare.github.io/fralQR/" target="_blank" rel="noopener">
+  <a href="https://www.youtube.com/embed/vknbgj5KRxQ?autoplay=1&mute=1&rel=0" target="_blank" rel="noopener">
     <img src="https://img.youtube.com/vi/vknbgj5KRxQ/maxresdefault.jpg"
       alt="▶ fralQR demo video" width="800">
   </a>
 </p>
 
-<sub align="center">▶ Click to watch — it starts playing automatically on
-[fralsare.github.io/fralQR](https://fralsare.github.io/fralQR/) (player-only
-page, no channel clutter). Also on [YouTube](https://youtu.be/vknbgj5KRxQ) and
-in this repo: [`demo_video/FralQRDemo.webm`](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)</sub>
+<sub align="center">▶ Click to watch — it starts playing automatically in a
+[player-only window](https://www.youtube.com/embed/vknbgj5KRxQ?autoplay=1&mute=1&rel=0)
+(muted, as browsers require; click the speaker icon for sound). Full video:
+[YouTube](https://youtu.be/vknbgj5KRxQ) — also in this repo:
+[`demo_video/FralQRDemo.webm`](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)</sub>
 <!-- markdownlint-enable MD033 -->
 
 ## Features
