@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#131f3a"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="2560" height="1440" fill="url(#bg)"/>
+  <rect x="0" y="0" width="2560" height="10" fill="url(#acc)"/>
+
+  <!-- faint QR decorations: left and right thirds (outside safe area) -->
+  <g opacity="0.05" fill="#ffffff">
+    <rect x="180" y="420" width="300" height="300" rx="64"/>
+    <rect x="180" y="780" width="120" height="120" rx="32"/>
+    <rect x="340" y="780" width="70" height="70" rx="20"/>
+    <rect x="2060" y="520" width="300" height="300" rx="64"/>
+    <rect x="2060" y="880" width="120" height="120" rx="32"/>
+    <rect x="2220" y="880" width="70" height="70" rx="20"/>
+    <rect x="120" y="900" width="60" height="60" rx="16"/>
+    <rect x="2360" y="440" width="60" height="60" rx="16"/>
+  </g>
+
+  <!-- content: centered inside the 1546x423 safe area (y 508..932) -->
+  <g transform="translate(1030,510) scale(0.390625)">
+    <rect x="48" y="48" width="416" height="416" rx="104" fill="url(#mark)"/>
+    <rect x="137" y="137" width="102" height="102" rx="22" fill="#ffffff"/>
+    <rect x="163" y="163" width="50" height="50" rx="12" fill="#3730a3"/>
+    <rect x="180" y="180" width="16" height="16" rx="4" fill="#ffffff"/>
+    <rect x="273" y="137" width="102" height="102" rx="22" fill="#ffffff"/>
+    <rect x="299" y="163" width="50" height="50" rx="12" fill="#3730a3"/>
+    <rect x="316" y="180" width="16" height="16" rx="4" fill="#ffffff"/>
+    <circle cx="188" cy="324" r="48" fill="#ffffff"/>
+    <circle cx="188" cy="324" r="24" fill="none" stroke="#3730a3" stroke-width="10"/>
+    <rect x="239" y="171" width="26" height="26" rx="8" fill="#ffffff"/>
+    <rect x="171" y="239" width="26" height="26" rx="8" fill="#ffffff"/>
+    <rect x="239" y="239" width="34" height="34" rx="9" fill="#ffffff"/>
+    <rect x="273" y="273" width="26" height="26" rx="8" fill="#ffffff"/>
+    <rect x="341" y="273" width="26" height="26" rx="8" fill="#ffffff"/>
+    <rect x="273" y="341" width="26" height="26" rx="8" fill="#ffffff"/>
+    <rect x="341" y="341" width="34" height="34" rx="9" fill="#fbbf24"/>
+  </g>
+  <text x="1270" y="672" font-family="DejaVu Sans, Verdana, sans-serif" font-size="110"
+        font-weight="bold" letter-spacing="-2"><tspan fill="#ffffff">fral</tspan><tspan fill="#2dd4bf">QR</tspan></text>
+
+  <text x="1280" y="820" text-anchor="middle" font-family="DejaVu Sans, Verdana, sans-serif"
+        font-size="72" font-weight="bold" fill="#ffffff">PDF menu &#8594; print-ready QR codes</text>
+  <text x="1280" y="884" text-anchor="middle" font-family="DejaVu Sans, Verdana, sans-serif"
+        font-size="34" fill="#94a3b8">Free, open-source desktop app for restaurants &#183; Windows &amp; Linux</text>
+  <text x="1280" y="926" text-anchor="middle" font-family="DejaVu Sans, Verdana, sans-serif"
+        font-size="26" fill="#64748b">github.com/fralsare/fralQR</text>
+</svg>
