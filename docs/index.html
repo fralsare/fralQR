@@ -17,6 +17,7 @@
     }
     .wrap {
       width: min(96vw, 1280px);
+      position: relative;
     }
     .player {
       position: relative;
@@ -31,11 +32,28 @@
       border: 0;
       border-radius: 12px;
     }
+    #soundhint {
+      position: absolute;
+      left: 50%;
+      bottom: 4.5%;
+      transform: translateX(-50%);
+      background: rgba(22, 27, 34, 0.92);
+      color: #e6edf3;
+      border: 1px solid #388bfd;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 10;
+      user-select: none;
+    }
+    #soundhint.hidden { display: none; }
     h1 {
       color: #e6edf3;
       font-size: 18px;
       font-weight: 600;
       margin: 14px 0 0;
+      text-align: center;
     }
     h1 a {
       color: #58a6ff;
@@ -45,15 +63,76 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="player">
-      <iframe
-        src="https://www.youtube.com/embed/vknbgj5KRxQ?autoplay=1&rel=0&modestbranding=1"
-        title="fralQR demo"
-        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-        allowfullscreen></iframe>
-    </div>
+    <div class="player"><div id="yt"></div></div>
+    <div id="soundhint">🔇 Click here (or the video) to turn sound on</div>
     <h1>fralQR — PDF menu to print-ready QR codes &middot;
       <a href="https://github.com/fralsare/fralQR">github.com/fralsare/fralQR</a></h1>
   </div>
+
+  <script>
+    var player = null;
+    var hint = document.getElementById("soundhint");
+
+    function showSound() { hint.classList.remove("hidden"); }
+    function hideSound() { hint.classList.add("hidden"); }
+
+    // The video must play (muted if the browser blocks sound).
+    function ensurePlaying() {
+      if (!player) return;
+      try {
+        var st = player.getPlayerState();
+        if (st !== 1) { // 1 === playing
+          player.playVideo();
+          if (player.isMuted()) player.unMute();
+        }
+        if (player.isMuted()) showSound(); else hideSound();
+      } catch (e) { /* player still initialising */ }
+    }
+
+    hint.addEventListener("click", function () {
+      if (!player) return;
+      if (player.isMuted()) player.unMute();
+      hideSound();
+    });
+
+    function onPlayerReady(ev) {
+      // Autoplay muted so it ALWAYS starts, on every browser.
+      if (ev.target.isMuted()) ensurePlaying();
+    }
+
+    function onPlayerStateChange(ev) {
+      if (ev.data === 1) {
+        if (!player.isMuted()) hideSound();
+      } else if (ev.data === 0) {
+        showSound(); // ended: offer replay with sound
+      }
+    }
+
+    function onYTAPI() {
+      player = new YT.Player("yt", {
+        videoId: "vknbgj5KRxQ",
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          controls: 1,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+      // Fallback in case onReady already passed the ready race.
+      setTimeout(ensurePlaying, 1200);
+      setTimeout(ensurePlaying, 3000);
+    }
+
+    var tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+    window.onYouTubeIframeAPIReady = onYTAPI;
+  </script>
 </body>
 </html>
