@@ -30,13 +30,13 @@ any phone.
 
 <!-- markdownlint-disable MD033 -->
 <p align="center">
-  <a href="https://youtu.be/vknbgj5KRxQ" target="_blank" rel="noopener">
+  <a href="https://youtu.be/vknbgj5KRxQ?autoplay=1" target="_blank" rel="noopener">
     <img src="https://img.youtube.com/vi/vknbgj5KRxQ/maxresdefault.jpg"
       alt="▶ fralQR demo video" width="800">
   </a>
 </p>
 
-<sub align="center">▶ Click to play on [YouTube](https://youtu.be/vknbgj5KRxQ) —
+<sub align="center">▶ Click to play (starts immediately) on [YouTube](https://youtu.be/vknbgj5KRxQ?autoplay=1) —
 the same recording also lives in this repo at
 [`demo_video/FralQRDemo.webm`](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)</sub>
 <!-- markdownlint-enable MD033 -->
