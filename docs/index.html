@@ -96,9 +96,28 @@
     });
 
     function onPlayerReady(ev) {
-      // Autoplay muted so it ALWAYS starts, on every browser.
-      if (ev.target.isMuted()) ensurePlaying();
+      // Canonical muted-autoplay pattern: mute via the API first, then
+      // play. Browsers always allow muted autoplay on page load.
+      ev.target.mute();
+      ev.target.playVideo();
+      showSound();
     }
+
+    // Fallback: if the browser blocked even muted autoplay (or the API
+    // raced), the first click anywhere on the page starts it with sound.
+    document.addEventListener("click", function (e) {
+      if (e.target === hint || !player) return;
+      try {
+        if (player.getPlayerState() !== 1) {
+          player.playVideo();
+          player.unMute();
+          hideSound();
+        } else if (player.isMuted()) {
+          player.unMute();
+          hideSound();
+        }
+      } catch (err) { /* player not ready yet */ }
+    });
 
     function onPlayerStateChange(ev) {
       if (ev.data === 1) {
