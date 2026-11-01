@@ -112,7 +112,10 @@ Then go to the repo and **finish** the release that GitHub auto-created:
 5. Wait for CI: <https://github.com/fralsare/fralQR/actions>. The
    **"Build & attach release artifacts"** job runs the Linux + Windows builds,
    then uploads all five files as release assets.
-6. Click **Publish release**.
+6. Attach the **demo video**: on the release page, drag
+   `AppTest/DemoVideo/FralQRDemo.webm` into the "Attach binaries" box
+   (or add it later). It is referenced by the README's Demo section.
+7. Click **Publish release**.
 
 > The builds take a few minutes (Python + PyInstaller install + compile).
 > When the job is green, the five files appear under the release.
@@ -121,16 +124,21 @@ Then go to the repo and **finish** the release that GitHub auto-created:
 
 ## 5) (Alternative) Upload the binaries you built locally
 
-You already have the **Linux** artifacts built in `dist/`:
+The complete local set (all five artifacts) sits in `AppTest/ReleaseFiles/`:
 
 ```
-dist/fralQR_1.0.0_amd64.deb
-dist/fralQR-1.0.0-1.x86_64.rpm
-dist/fralQR-1.0.0-amd64.AppImage
+AppTest/ReleaseFiles/fralQR_1.0.0_amd64.deb
+AppTest/ReleaseFiles/fralQR-1.0.0-1.x86_64.rpm
+AppTest/ReleaseFiles/fralQR-1.0.0-amd64.AppImage
+AppTest/ReleaseFiles/fralQR-Setup-1.0.0.exe
+AppTest/ReleaseFiles/fralQR-1.0.0-windows-portable.exe
 ```
 
-Option A — **web UI**: on the release page, drag the files from `dist/` into the
-"Attach binaries" box (Windows `.exe` files if you built them on a Windows box).
+…plus the demo video: `AppTest/DemoVideo/FralQRDemo.webm`.
+
+Option A — **web UI**: on the release page, drag the files from
+`AppTest/ReleaseFiles/` (and the demo video) into the "Attach binaries" box.
+The release then carries **six assets** (five artifacts + `FralQRDemo.webm`).
 
 Option B — **`gh` CLI** (fastest; `brew install gh` / `apt install gh`, then
 `gh auth login`):
@@ -148,11 +156,14 @@ gh release create v1.0.0 \
   "dist/fralQR-1.0.0-amd64.AppImage"
 ```
 
-Add the Windows files the same way (they're not built on Linux; get them from CI
-or a Windows machine via `packaging\build_windows.bat`), e.g.:
+Add the Windows files and the demo video the same way (everything is already in
+`AppTest/ReleaseFiles/`), e.g.:
 
 ```bash
-gh release upload v1.0.0 "fralQR-Setup-1.0.0.exe" "fralQR-1.0.0-portable.exe"
+gh release upload v1.0.0 \
+  "AppTest/ReleaseFiles/fralQR-Setup-1.0.0.exe" \
+  "AppTest/ReleaseFiles/fralQR-1.0.0-windows-portable.exe" \
+  "AppTest/DemoVideo/FralQRDemo.webm"
 ```
 
 ---
@@ -161,7 +172,8 @@ gh release upload v1.0.0 "fralQR-Setup-1.0.0.exe" "fralQR-1.0.0-portable.exe"
 
 - <https://github.com/fralsare/fralQR> — README renders, badges show, folder list
   does **not** include `AppTest/`.
-- <https://github.com/fralsare/fralQR/releases/tag/v1.0.0> — five assets present.
+- <https://github.com/fralsare/fralQR/releases/tag/v1.0.0> — six assets present
+  (five artifacts + `FralQRDemo.webm`).
 - Download one and run it (e.g. `chmod +x fralQR-*.AppImage && ./fralQR-*.AppImage`).
 
 ---

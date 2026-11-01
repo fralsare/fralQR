@@ -26,6 +26,12 @@ any phone.
 > A QR code only stores a URL. To make a phone show your menu, the PDF must be
 > hosted at a public URL first — fralQR handles that whole process for you.
 
+## ▶ Demo
+
+[▶ Watch a short demo of fralQR in action](https://github.com/fralsare/fralQR/releases/download/v1.0.0/FralQRDemo.webm)
+(screen recording, attached as the `FralQRDemo.webm` asset on the
+[v1.0.0 release](https://github.com/fralsare/fralQR/releases/tag/v1.0.0)).
+
 ## Features
 
 - **PDF → QR codes** — uploads your PDF to a public host, then generates **two** QR codes:
