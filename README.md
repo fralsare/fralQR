@@ -28,8 +28,18 @@ any phone.
 
 ## ▶ Demo
 
-[▶ Watch a short demo of fralQR in action](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)
-(screen recording; the file lives in this repo under [`demo_video/`](https://github.com/fralsare/fralQR/tree/main/demo_video)).
+<!-- markdownlint-disable MD033 -->
+<p align="center">
+  <iframe width="800" height="450"
+    src="https://www.youtube.com/embed/vknbgj5KRxQ"
+    title="fralQR demo" frameborder="0"
+    allowfullscreen></iframe>
+</p>
+
+<sub>▶ Full HD on [YouTube](https://youtu.be/vknbgj5KRxQ) — the same recording
+also lives in this repo at
+[`demo_video/FralQRDemo.webm`](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm)</sub>
+<!-- markdownlint-enable MD033 -->
 
 ## Features
 

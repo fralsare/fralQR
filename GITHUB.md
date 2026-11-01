@@ -174,8 +174,9 @@ gh release upload v1.0.0 \
 - <https://github.com/fralsare/fralQR> — README renders, badges show, folder list
   does **not** include `AppTest/`.
 - <https://github.com/fralsare/fralQR/releases/tag/v1.0.0> — five assets present.
-- The README **▶ Demo** link opens the video at
-  <https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm>.
+- The README **▶ Demo** section shows the YouTube demo embedded
+  (<https://youtu.be/vknbgj5KRxQ>); the same recording is also in the repo at
+  `demo_video/FralQRDemo.webm` as a fallback.
 - Download one and run it (e.g. `chmod +x fralQR-*.AppImage && ./fralQR-*.AppImage`).
 
 ---

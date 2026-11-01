@@ -3,8 +3,17 @@
 fralQR is a desktop app for making scannable QR codes from a PDF menu (and for
 turning images back into a PDF). This manual covers installation and every screen.
 
-▶ **New here?** A short demo video lives in the repo at
-[`demo_video/FralQRDemo.webm`](https://github.com/fralsare/fralQR/blob/main/demo_video/FralQRDemo.webm).
+▶ **New here?** Watch the demo below (also on
+[YouTube](https://youtu.be/vknbgj5KRxQ)):
+
+<!-- markdownlint-disable MD033 -->
+<p align="center">
+  <iframe width="800" height="450"
+    src="https://www.youtube.com/embed/vknbgj5KRxQ"
+    title="fralQR demo" frameborder="0"
+    allowfullscreen></iframe>
+</p>
+<!-- markdownlint-enable MD033 -->
 
 ---
 
